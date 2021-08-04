@@ -1,4 +1,4 @@
-#Compile and link
+# Compile and link
 
 * gcc -Wall -lcurl 03_01-curltest1.c -o test
 * clang -Wall lcurl 03_01-curltest1.c -o test
