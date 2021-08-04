@@ -4,9 +4,7 @@ Code Practice associated with the Linkedin Learning course:
 
 Course URL https://www.linkedin.com/learning/exploring-c-libraries
 
-![GitHub Logo](/images/logo.png)![image](https://user-images.githubusercontent.com/45753986/128147262-6fb91815-8bc5-45bf-9d89-c30837aaf076.png)
-
-
+![Course Screenshot Landing Page](/2021-08-04_11-18-40.png)
 
 ## Learning objectives
 
