@@ -2,9 +2,9 @@ Code Practice associated with the Linkedin Learning course:
 
 # Exploring C Libraries
 
-Course URLhttps://www.linkedin.com/learning/exploring-c-libraries
+Course URL https://www.linkedin.com/learning/exploring-c-libraries
 
-Author: Dan Gookin
+![GitHub Logo](/images/logo.png)![image](https://user-images.githubusercontent.com/45753986/128147262-6fb91815-8bc5-45bf-9d89-c30837aaf076.png)
 
 
 
