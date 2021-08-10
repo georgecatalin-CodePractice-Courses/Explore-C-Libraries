@@ -2,18 +2,62 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <fcntl.h>
 
-void readFlags(int fd){
-    int returnValue;
-    if((returnValue = fcntl(fd, F_GETFL, 0))<0){
-        printf("Error opening file descriptor %d.\n", fd);
-        return;
+int setFlags(int fd, int flags);
+int removeFlags(int fd, int flags);
+void strFlagReturn(int returnValue);
+void printFlags(int fd);
+
+
+int main(void){
+    
+    int fdOne = open("another.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU);
+    
+    if(fdOne < 0){
+        printf("Error creating file descriptor.\n");
+        exit(EXIT_FAILURE);
     }
-    printf("Access mode flags for fd %d: ", fd);
-    switch(returnValue & O_ACCMODE){
+    
+    printFlags(fdOne);
+    strFlagReturn(setFlags(fdOne, O_APPEND));
+    printFlags(fdOne);
+    strFlagReturn(setFlags(fdOne, O_NONBLOCK));
+    printFlags(fdOne);
+    strFlagReturn(removeFlags(fdOne, O_NONBLOCK));
+    printFlags(fdOne);
+    
+    return 0;
+    
+}
+
+
+void strFlagReturn(int returnVal){
+    switch(returnVal){
+        case 0:
+            printf("Flags value altered successfully.\n");
+            break;
+        case -1:
+            printf("Could not get flags to alter them.\n");
+            break;
+        case -2:
+            printf("Could not alter flags after retrieving them.\n");
+            break;
+    }
+    
+}
+void printFlags(int fd){
+    int flags;
+    
+    if((flags=fcntl(fd, F_GETFL, 0))<0){
+        printf("Couldn't access flags for fd %d.\n", fd);
+        return;
+    } else {
+        printf("File Desc. %d: ", fd);
+    }
+    switch(flags & O_ACCMODE){
         case O_RDONLY:
             printf("Read only. ");
             break;
@@ -23,51 +67,53 @@ void readFlags(int fd){
         case O_RDWR:
             printf("Read and write. ");
             break;
-        default:
-            printf("Unknown access mode. ");
-            break;
-    } // end switch
-    if(returnValue & O_APPEND){
-        printf("+Append.");
+    } // end switch-----
+    
+    if(flags & O_APPEND){
+        printf(" Append. ");
     }
-    if(returnValue & O_NONBLOCK){
-        printf("+Nonblocking");
+    
+    if(flags & O_NONBLOCK){
+        printf(" Non-blocking.");
     }
+    
     printf("\n");
-} // end function readFlags ---------------
+}
 
-int main(void){
+//this uses logical and to remove flags
+int removeFlags(int fd, int flags){
+    int oldFlags;
     
-    int fdOne, fdTwo;
-    
-    if((fdOne = open("append.txt", O_CREAT | O_APPEND, S_IRWXU))<0){
-        printf("Error opening append.txt.\n");
-        exit(EXIT_FAILURE);
-    } else {
-        printf("File opened with fd %d.\n", fdOne);
+    if((oldFlags = fcntl(fd, F_GETFL, 0))<0){
+        return -1;
     }
+   
+    //AND the flag values
+    //and inverse the flags parameter
+    flags = ~flags & oldFlags;
     
-    
-    if((fdTwo = open("nonblocking.txt", O_CREAT | O_NONBLOCK, S_IRWXU))<0){
-       printf("Error opening nonblocking.txt");
-       exit(EXIT_FAILURE);
-    } else {
-        printf("File opened with fd %d.\n", fdTwo);
-    }
-    
-    readFlags(fdOne);
-    readFlags(fdTwo);
-    
-    if((close(fdOne))<0){
-        printf("Error closing fdOne.\n");
-        exit(EXIT_FAILURE);
-    }
-    
-    if((close(fdTwo))<0){
-        printf("Error closing fdTwo.\n");
-        exit(EXIT_FAILURE);
+    if(fcntl(fd, F_SETFL, flags) < 0){
+        return -2;
     }
     
     return 0;
     
+}
+
+//this uses logical or to add flags
+int setFlags(int fd, int flags){
+    int oldFlags;
+    
+    if((oldFlags = fcntl(fd, F_GETFL, 0))<0){
+        return -1;
+    }
+    
+    //OR the flags values
+    flags = flags | oldFlags;
+
+    if((fcntl(fd, F_SETFL, flags))<0){
+        return -2;
+    } 
+    
+    return 0;
 }
