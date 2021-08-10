@@ -12,3 +12,6 @@ from https://aljensencprogramming.wordpress.com/2014/12/30/introduction-to-the-f
 * getting or setting file status flags
 * getting or setting ayschronous I/O ownership
 * getting or setting record locks 
+
+## The O_NONBLOCK mode
+The O_NONBLOCK mode causes the file to open in non-blocking mode, no operations on the file descriptor will cause the calling process to wait
