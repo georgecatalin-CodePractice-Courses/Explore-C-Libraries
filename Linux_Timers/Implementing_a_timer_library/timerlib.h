@@ -26,3 +26,19 @@ typedef struct Timer_
 	TIMER_STATE_T timer_state;
 	
 } Timer_t
+
+
+//This function return NULL when the timer creation fails, or it returns a pointer to the Timer object if it succeeds
+Timer_t *setup_timer(
+	// Timer Callback with user data and user size. This function pointer will be invoked when the timer fires
+	void (*) (Timer_t *,void *),
+	// First expiration time interval in milliseconds
+	unsigned long,
+	//Subsequent expiration time interval in milliseconds
+	unsigned long,
+	// Max number of expirations, 0 for infinite
+	uint32_t,
+	//Argument to timer callback function
+	void *,
+	//is this timer an exponential backoff timer?
+	bool);
