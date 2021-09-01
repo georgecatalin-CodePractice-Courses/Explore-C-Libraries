@@ -90,7 +90,10 @@ void timer_demo()
 	ts.it_value.tv_sec=5;
 	ts.it_value.tv_nsec=0;
 
-    ts.it_interval.tv_sec=0;
+	//this it_interval specifies the interval of executing after the first timer fires/expires. 
+	//Using this one can convert a one-off timer to a periodic timer
+	//so in this example the timer will start and fire the 1st time at 5 seconds, then at each 4 seconds infinitely
+    ts.it_interval.tv_sec=4;
 	ts.it_interval.tv_nsec=0;
 
 
